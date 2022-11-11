@@ -1,0 +1,129 @@
+﻿@using BibliotekaWeb.Core
+@using BibliotekaWeb.Core.Repositories.ViewModels
+@model List<BookWithNumViewModel>
+
+<div class="container p-3">
+    <div class="row pt-4">
+        <div class="col-6">
+            <h1 class="text-primary">List of Books</h1>
+        </div>
+        <div class="col-6 text-end">
+            @if (User.Identity.IsAuthenticated){
+                if (User.IsInRole(Constants.Roles.Administrator)) {
+                    <a asp-controller="Book" asp-action="AddBook" class="btn btn-primary">
+                        <i class="bi bi-plus-circle"></i> &nbsp; Add Book
+                    </a>
+                }
+            }
+        </div>
+    </div>
+</div>
+
+<br />
+
+@if (User.Identity.IsAuthenticated) {
+    if (User.IsInRole(Constants.Roles.User)) {
+
+        <table class="table table-bordered text-white table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width:30%">Name</th>
+                    <th class="text-center" style="width:30%">Author</th>
+                    <th class="text-center" style="width:30%">Do you want to reserve the book?</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td class="text-center">@item.Book.Name</td>
+                        <td class="text-center">@item.Book.Author</td>
+                        <td class="text-center">
+
+                            @if(item.Status == Enums.ActiveStatus.reserved)
+                            {
+                                <a asp-controller="Reservation" asp-action="ReserveBook" class="btn btn-primary" style="pointer-events:none; background-color:red; width:70%">
+                                    The book is already reserved
+                                </a>
+                            }
+                            @if (item.Status == Enums.ActiveStatus.pendingForReserve)
+                            {
+                                <a asp-controller="Reservation" asp-action="ReserveBook" class="btn btn-primary" style="pointer-events:none; width:70%; background-color:red;">
+                                    Pending reservation
+                                </a>
+                            }
+                            @if (item.Status == Enums.ActiveStatus.pendingForReturn)
+                            {
+                                <a asp-controller="Reservation" asp-action="ReserveBook" class="btn btn-primary" style="pointer-events:none; width:70%; background-color:red;">
+                                    Pending for return
+                                </a>
+                            }
+                            @if (item.Status == Enums.ActiveStatus.aboveTheLimit)
+                            {
+                                <a asp-controller="Reservation" asp-action="ReserveBook" class="btn btn-primary" style="pointer-events:none; width:70%; background-color:red;">
+                                    U already have maximum books
+                                </a>
+                            }
+                            @if (item.Status == Enums.ActiveStatus.noAvailableBooks)
+                            {
+                                <a asp-controller="Reservation" asp-action="ReserveBook" class="btn btn-primary" style="pointer-events:none; width:70%; background-color:red;">
+                                    There are no available copies
+                                </a>
+                            }
+                            @if (item.Status == Enums.ActiveStatus.nothing)
+                            {
+                                <a asp-controller="Reservation" asp-action="ReserveBook" asp-route-id=@item.Book.BookId class="btn btn-primary" style="width:70%; color:aliceblue">
+                                    Reserve the book
+                                </a>
+                            }
+
+                        </td>
+                    </tr>
+                }
+        </table>
+        
+    }
+
+    else if (User.IsInRole(Constants.Roles.Administrator)) {
+
+        <table class="table text-white table-bordered table-striped" style="width:100%">
+            <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Author</th>
+                    <th>Available copies</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Book.Name</td>
+                        <td>@item.Book.Author</td>
+                        <td>@item.NumberOfAvailableCopies</td>
+                    </tr>
+                }
+        </table>
+    }
+}
+
+@if (!User.Identity.IsAuthenticated) {
+
+    <table class="table text-white table-bordered table-striped" style="width:100%">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Author</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Book.Name</td>
+                    <td>@item.Book.Author</td>
+                </tr>
+            }
+    </table>
+}
+

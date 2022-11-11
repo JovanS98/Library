@@ -1,0 +1,42 @@
+﻿@using BibliotekaWeb.Core.Repositories.ViewModels
+@model IEnumerable<ProcessViewModel>
+
+<div class="container p-3 row pt-4 col-6">
+    <h1 class="text-primary">My reservations</h1>
+</div>
+
+<br />
+
+<table class="table text-white table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>Name</th>
+            <th>Author</th>
+            <th>Reservation time</th>
+            <th>Return deadline</th>
+            <th>Do you want to return the book?</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.Process.Book.Name</td>
+                <td>@item.Process.Book.Author</td>
+                <td>@item.Process.Time</td>
+                <td>@item.Process.ReturnDeadline</td>
+                <td>
+                    @if (item.PendingForReturn){
+                        <a asp-controller="Reservation" asp-action="ReturnBook" class="btn btn-primary" style="pointer-events:none; background-color:red; width:100%">
+                            Pending for return
+                        </a>
+                    }
+                    @if (!item.PendingForReturn){
+                        <a asp-controller="Reservation" asp-action="ReturnBook" asp-route-id=@item.Process.BookId class="btn btn-primary" style="color:aliceblue; width:100%">
+                            Return the book
+                        </a>
+                    }
+                </td>
+            </tr>
+        }
+</table>

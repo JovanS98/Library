@@ -1,0 +1,32 @@
+﻿@model IEnumerable<Process>
+
+<div class="container p-3 row pt-4 col-6">
+    <h1 class="text-primary">All reservations</h1>
+</div>
+
+<br />
+
+<table class="table text-white table-bordered table-striped" style="width:100%">
+    <thead>
+        <tr>
+            <th>First name</th>
+            <th>Last name</th>
+            <th>Book</th>
+            <th>Author</th>
+            <th>Reservation time</th>
+            <th>Return deadline</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>@item.User.FirstName</td>
+                <td>@item.User.LastName</td>
+                <td>@item.Book.Name</td>
+                <td>@item.Book.Author</td>
+                <td>@item.Time</td>
+                <td>@item.ReturnDeadline</td>
+            </tr>
+        }
+</table>

@@ -1,0 +1,28 @@
+﻿@using BibliotekaWeb.Core.Repositories.ViewModels
+@model BookWithNumViewModel
+
+<form method="post" style="margin-top:10%">
+	<div class="border p-5 mt-2">
+		<div class="row pb-2">
+			<h2 class="text-primary">Create Book</h2>
+			<hr />
+		</div>
+		<div class="mb-3">
+			<label asp-for="Book.Name"></label>
+			<input asp-for="@Model.Book.Name" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label asp-for="Book.Author"></label>
+			<input asp-for="@Model.Book.Author" class="form-control" />
+		</div>
+		<div class="mb-3">
+			<label asp-for="NumberOfAvailableCopies"></label>
+			<input asp-for="@Model.NumberOfAvailableCopies" class="form-control" />
+		</div>
+		<button type="submit" class="btn btn-primary" style="width:150px">Add Book</button>
+		<a asp-controller="Book" asp-action="Library" class="btn btn-secondary" style="width:150px">
+			Back to Library
+		</a>
+	</div>
+
+</form>
