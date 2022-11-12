@@ -10,14 +10,17 @@
 		<div class="mb-3">
 			<label asp-for="Book.Name"></label>
 			<input asp-for="@Model.Book.Name" class="form-control" />
+			<span asp-validation-for="Book.Name" class="text-danger"></span>
 		</div>
 		<div class="mb-3">
 			<label asp-for="Book.Author"></label>
 			<input asp-for="@Model.Book.Author" class="form-control" />
+			<span asp-validation-for="Book.Author" class="text-danger"></span>
 		</div>
 		<div class="mb-3">
 			<label asp-for="NumberOfAvailableCopies"></label>
 			<input asp-for="@Model.NumberOfAvailableCopies" class="form-control" />
+			<span asp-validation-for="NumberOfAvailableCopies" class="text-danger"></span>
 		</div>
 		<button type="submit" class="btn btn-primary" style="width:150px">Add Book</button>
 		<a asp-controller="Book" asp-action="Library" class="btn btn-secondary" style="width:150px">

@@ -112,9 +112,15 @@ namespace BibliotekaWeb.Controllers
         public IActionResult AddBook(BookWithNumViewModel obj)
         {
             // Postavljam novu knjigu
-            _db.Books.Add(obj.Book);
-
-            _db.SaveChanges();
+            if (ModelState.IsValid)
+            {
+                _db.Books.Add(obj.Book);
+                _db.SaveChanges();
+            }
+            else
+            {
+                return View(obj);
+            }
 
             var userId = getCurrentUserId();
 

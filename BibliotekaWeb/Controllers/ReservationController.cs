@@ -143,7 +143,7 @@ namespace BibliotekaWeb.Controllers
         }
 
         // Ne radi sa httpPost
-       // [HttpPost]
+        //[HttpPost]
         public async Task<IActionResult> ReturnBook(int? id)
         {
 
