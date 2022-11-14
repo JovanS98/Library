@@ -38,26 +38,32 @@ $(document).ready(() => {
             }
         }
 
+        let time = getDate(process.time);
+        
         let template = `<tr>
                           <td>${process.user.firstName}</td>
                           <td>${process.user.lastName}</td>
                           <td>${process.book.name}</td>
-                          <td>${process.time}</td>
+                          <td>${time}</td>
                         </tr>`;
 
         $processBody.append($(template)).append($(btn));
     }
 
-  /*  function deleteProcess(button) {
-        let id = $(button).attr("data-id");
-        $.ajax({
-            url: `/api/processes/${id}`,
-            method: "delete"
-        })
-            .then(res => {
-                $(button).closest("tr").remove();
-            });
-    } */
+    function getDate(processTime) {
+
+        let date = new Date(processTime);
+        let day = date.getDate();
+        let month = date.getMonth() + 1;
+        let year = date.getFullYear();
+        let hour = date.getHours();
+        let minute = date.getMinutes();
+        let second = date.getSeconds();
+
+        let time = day + "-" + month + "-" + year + " " + hour + ':' + minute + ':' + second; 
+
+        return time;
+    }
 
     function fulfilled() {
         console.log("[PendingReservations] Connection to Hub Successful");
@@ -68,7 +74,7 @@ $(document).ready(() => {
     }
 
     function getProcesses() {
-        $.getJSON("/api/processes")
+        $.getJSON("/api/processes/pendingReservations")
             .then(res => {
                 processes = res;
                 addProcesses();
@@ -79,6 +85,6 @@ $(document).ready(() => {
                 $theWarning.show();
             });
     }
-
+    
     getProcesses();
 });

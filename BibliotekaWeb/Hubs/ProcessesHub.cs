@@ -1,4 +1,5 @@
-﻿using BibliotekaWeb.Models;
+﻿using BibliotekaWeb.Core.Repositories.ViewModels;
+using BibliotekaWeb.Models;
 using Microsoft.AspNetCore.SignalR;
 
 namespace BibliotekaWeb.Hubs
@@ -9,11 +10,23 @@ namespace BibliotekaWeb.Hubs
         {
             await Clients.All.NewProcessReceived(newProcess);
         }
-        public async Task BookIsAccepted(string userId, Process process)
+        public async Task BookIsAccepted(string userId, ProcessViewModel process)
         {
             await Clients.User(userId).BookIsAccepted(userId, process);
         }
+        public async Task BookIsReturned(string userId, Process process)
+        {
+            await Clients.User(userId).BookIsReturned(userId, process);
+        }
 
-        public string GetConnectionId() => Context.ConnectionId;
+        public async Task AddedReservation(Process process)
+        {
+            await Clients.All.AddedReservation(process);
+        }
+
+        public async Task DeletedReservation(Process process)
+        {
+            await Clients.All.DeletedReservation(process);
+        }
     }
 }

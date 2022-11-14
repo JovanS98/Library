@@ -6,8 +6,12 @@ $(document).ready(() => {
         .withUrl("/Processes")
         .build();
 
-    client.on("BookIsAccepted", (userId, process) => {
-        document.getElementById(`${process.book.name}`).innerHTML = "The book is successfully reserved";
+    client.on("BookIsAccepted", (userId, processView) => {
+        document.getElementById(`${processView.process.book.name}`).innerHTML = "The book is successfully reserved";
+    });
+
+    client.on("BookIsReturned", (userId, processView) => {
+        document.getElementById(`${processView.process.book.name}`).innerHTML = "The book is successfully returned";
     });
 
     function fulfilled() {

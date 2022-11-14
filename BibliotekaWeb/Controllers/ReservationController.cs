@@ -31,6 +31,23 @@ namespace BibliotekaWeb.Controllers
             return View();
         }
 
+        // SignalR
+        [HttpGet]
+        [Route("api/processes/allUsersReservations")]
+        [Authorize(Roles = $"{Constants.Roles.Administrator}")]
+        public IActionResult GetAllReservations()
+        {
+            List<Process> objReservationsList = _db.Processes
+                                                .Include(b => b.Book)
+                                                .Include(u => u.User)
+                                                .OrderBy(o => o.UserId)
+                                                .Where(p => p.IsActiveReservation == true)
+                                                .ToList();
+
+            return Ok(objReservationsList);
+        }
+
+        // Bez SignalR
         [Authorize(Roles = $"{Constants.Roles.Administrator}")]
         public IActionResult AllReservations()
         {
@@ -44,9 +61,9 @@ namespace BibliotekaWeb.Controllers
             return View(objReservationsList);
         }
 
-        // Ovo je za koriscenje signalR  
+        // SignalR  
           [HttpGet]
-          [Route("api/processes")]
+          [Route("api/processes/pendingReservations")]
           [Authorize(Roles = $"{Constants.Roles.Administrator}")]
           public IActionResult Get()
           {
@@ -60,6 +77,7 @@ namespace BibliotekaWeb.Controllers
               return Ok(objReservationsList);
           } 
 
+        // Bez SignalR
         [Authorize(Roles = $"{Constants.Roles.Administrator}")]
         public IActionResult PendingReservations()
         {
@@ -71,8 +89,43 @@ namespace BibliotekaWeb.Controllers
                                                   .ToList();
 
             return View(objReservationsList);
-        } 
+        }
 
+        // SignalR
+        [HttpGet]
+        [Route("api/processes/userReservations")]
+        [Authorize(Roles = $"{Constants.Roles.User}")]
+        public IActionResult GetUserReservations()
+        {
+            IEnumerable<Process> objReservationsList = getCurrentUserReservations();
+            List<ProcessViewModel> pwmList = new List<ProcessViewModel>();
+
+            // Prolazim kroz sve rezervacije da proverim da li postoji zatrazen povrat knjige
+            // tj. trazim da li je korisnik kliknuo na "return the book"
+            foreach (Process objReservation in objReservationsList)
+            {
+                var userId = objReservation.UserId;
+                var bookId = objReservation.BookId;
+
+                Func<Process, bool> condition = p => p.BookId == bookId && p.UserId == userId && p.Status == Enums.Status.returned;
+
+                Process? process = _db.Processes.Where(p => p.PendingReservation == true).FirstOrDefault(condition);
+
+                ProcessViewModel pwm = new ProcessViewModel();
+                pwm.Process = objReservation;
+
+                if (process != null)
+                {
+                    pwm.PendingForReturn = true;
+                }
+
+                pwmList.Add(pwm);
+            }
+
+            return Ok(pwmList);
+        }
+
+        // Bez signalR
         [Authorize(Roles = $"{Constants.Roles.User}")]
         public IActionResult UserReservations()
         {
@@ -150,10 +203,10 @@ namespace BibliotekaWeb.Controllers
 
         // Ne radi sa httpPost
         //[HttpPost]
-        public async Task<IActionResult> ReturnBook(int? id)
+        public async Task<IActionResult> ReturnBook(int? bookId)
         {
 
-             if (id == null || id == 0)
+             if (bookId == null || bookId == 0)
             {
                 return NotFound();
             } 
@@ -163,7 +216,7 @@ namespace BibliotekaWeb.Controllers
             Process process = new Process();
 
             process.UserId = userId;
-            process.BookId = (int)id;
+            process.BookId = (int)bookId;
             process.Status = Enums.Status.returned;
             process.ReturnDeadline = process.Time.AddDays(Constants.Limits.Deadline);
             process.IsActiveReservation = false;
@@ -174,7 +227,7 @@ namespace BibliotekaWeb.Controllers
             await _db.SaveChangesAsync();
 
             var user = _db.Users.Find(userId);
-            var book = _db.Books.Find((int)id);
+            var book = _db.Books.Find((int)bookId);
             process.User = user;
             process.Book = book;
 
@@ -183,7 +236,7 @@ namespace BibliotekaWeb.Controllers
             return RedirectToAction("UserReservations");
         }
 
-        public IActionResult MarkReturnedBook(string userId, int bookId)
+        public async Task<IActionResult> MarkReturnedBook(string userId, int bookId)
         {
             Func<Process, bool> condition = p => p.UserId == userId && p.BookId == bookId;
 
@@ -209,13 +262,13 @@ namespace BibliotekaWeb.Controllers
 
             // Azuriram proces da se zna da je admin prihvatio povrat knjige
             _db.Processes.Update(updateProcess);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
 
             // Sada trazim proces u kome stoji da je aktivna rezervacija, treba da je promenim na neaktivnu
             // Nisam zeleo da menjam procese iz stanja u stanje kako bih sacuvao informacije o tome ko je kad koju knjigu rezervisao i kad je vratio
 
             condition = p => p.BookId == bookId && p.UserId == userId;
-            Process? activeProcess = _db.Processes.OrderBy(o => o.Time).Where(p => p.IsActiveReservation == true).LastOrDefault(condition);
+            Process? activeProcess = _db.Processes.Include(b => b.Book).OrderBy(o => o.Time).Where(p => p.IsActiveReservation == true).LastOrDefault(condition);
 
             if (activeProcess == null)
             {
@@ -226,7 +279,10 @@ namespace BibliotekaWeb.Controllers
 
             // Azuriram proces koji govori da korisnik vise nema ovu knjigu
             _db.Processes.Update(activeProcess);
-            _db.SaveChanges();
+            await _db.SaveChangesAsync();
+
+            await _hubContext.Clients.User(userId).BookIsReturned(userId, activeProcess);
+            await _hubContext.Clients.All.DeletedReservation(activeProcess);
 
             return RedirectToAction("PendingReservations");
         }
@@ -245,7 +301,7 @@ namespace BibliotekaWeb.Controllers
 
             Func<Process, bool> condition = p => p.UserId == userId && p.BookId == bookId;
 
-            Process? updateProcess = _db.Processes.Include(b => b.Book).Where(p => p.PendingReservation == true).FirstOrDefault(condition);
+            Process? updateProcess = _db.Processes.Include(b => b.Book).Include(u => u.User).Where(p => p.PendingReservation == true).FirstOrDefault(condition);
 
             if (updateProcess == null)
             {
@@ -264,7 +320,7 @@ namespace BibliotekaWeb.Controllers
             //dohvatim poslednji proces u kome je ukljucena ta knjiga, a da nije "nerazresena", znaci ili da je dodata ili
             //rezervisana ili vracena
 
-            //Ovo ne radi, ne znam zasto
+            // Ovo ne radi, ne znam zasto mi ne iscitava lepo PendingReservation 
             // condition = p => p.BookId == bookId && p.PendingReservation == false
             // Process? numProcess = _db.Processes.OrderBy(o => o.Time).LastOrDefault(condition);
 
@@ -284,8 +340,14 @@ namespace BibliotekaWeb.Controllers
 
             _db.Processes.Update(updateProcess);
             _db.SaveChanges();
-           
-            await _hubContext.Clients.User(userId).BookIsAccepted(userId, updateProcess);
+
+            // Pravim processView kako bih poslao JS preko singalR
+
+            ProcessViewModel pwm = new ProcessViewModel();
+            pwm.Process = updateProcess;
+
+            await _hubContext.Clients.User(userId).BookIsAccepted(userId, pwm);
+            await _hubContext.Clients.All.AddedReservation(updateProcess);
 
             return RedirectToAction("PendingReservations");
         }

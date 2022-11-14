@@ -10,64 +10,87 @@ $(document).ready(() => {
         .withUrl("/Processes")
         .build();
 
-    client.on("BookIsReturned", (newProcess) => {
-        addProcess(newProcess);
+    client.on("BookIsAccepted", (userId, newProcessView) => {
+        addProcess(newProcessView);
     });
 
+    client.on("BookIsReturned", (userId, newProcess) => {
+        console.log("Primljena poruka ", newProcess);
+        deleteProcess(newProcess);
+    });
+
+    function deleteProcess(process) {
+
+        let name = process.book.name;
+
+        let row = document.getElementById("row" + name);
+        let btn = document.getElementById("btn" + name);
+
+        row.remove();
+        btn.remove();
+    }
+
     function addProcesses() {
-        $logBody.empty();
+        $processBody.empty();
         $.each(processes, (i, c) => addProcess(c));
     }
 
-    function addProcess(process) {
+    function addProcess(processView) {
 
         let btn = document.createElement("button");
-        btn.className = "btn btn-primary";
+        btn.className = `btn btn-primary`;
+        btn.id = `btn${processView.process.book.name}`;
 
-        if (process.status == 0) {
-            btn.innerHTML = "Accept reservation";
+        if (processView.pendingForReturn == false) {
+            btn.innerHTML = "Return the book";
             btn.onclick = function () {
-                window.location = "https://localhost:7097/Reservation/AcceptReservation?userId=" + process.userId + "&bookId=" + process.bookId;
+                window.location = "https://localhost:7097/Reservation/ReturnBook?bookId=" + processView.process.bookId;
             }
         }
         else {
-            btn.innerHTML = "Mark as returned";
-            btn.onclick = function () {
-                window.location = "https://localhost:7097/Reservation/MarkReturnedBook?userId=" + process.userId + "&bookId=" + process.bookId;
-            }
+            btn.innerHTML = "Pending for return";
+            btn.style.pointerEvents = "none";
+            btn.style.backgroundColor = "red";
         }
 
-        let template = `<tr>
-                          <td>${process.user.firstName}</td>
-                          <td>${process.user.lastName}</td>
-                          <td>${process.book.name}</td>
-                          <td>${process.time}</td>
+        let reservationTime = getDate(processView.process.time);
+        let returnDeadline = getDate(processView.process.returnDeadline);
+
+        let template = `<tr id="row${processView.process.book.name}">
+                          <td>${processView.process.book.name}</td>
+                          <td>${processView.process.book.author}</td>
+                          <td>${reservationTime}</td>
+                          <td>${returnDeadline}</td>
                         </tr>`;
 
-        $logBody.append($(template)).append($(btn));
+        $processBody.append($(template)).append($(btn));
     }
 
-    /*  function deleteProcess(button) {
-          let id = $(button).attr("data-id");
-          $.ajax({
-              url: `/api/processes/${id}`,
-              method: "delete"
-          })
-              .then(res => {
-                  $(button).closest("tr").remove();
-              });
-      } */
+    function getDate(processTime) {
+
+        let date = new Date(processTime);
+        let day = date.getDate();
+        let month = date.getMonth() + 1;
+        let year = date.getFullYear();
+        let hour = date.getHours();
+        let minute = date.getMinutes();
+        let second = date.getSeconds();
+
+        let time = day + "-" + month + "-" + year + " " + hour + ':' + minute + ':' + second;
+
+        return time;
+    }
 
     function fulfilled() {
-        console.log("[PendingReservations] Connection to Hub Successful");
+        console.log("[User Reservations] Connection to Hub Successful");
     }
 
     function rejected() {
-        console.log("[PendingReservations] Connection to Hub was not Successful");
+        console.log("[User Reservations] Connection to Hub was not Successful");
     }
 
     function getProcesses() {
-        $.getJSON("/api/processes")
+        $.getJSON("/api/processes/userReservations")
             .then(res => {
                 processes = res;
                 addProcesses();

@@ -14,11 +14,11 @@
             <th>Author</th>
             <th>Reservation time</th>
             <th>Return deadline</th>
-            <th>Do you want to return the book?</th>
+           @* <th>Do you want to return the book?</th>*@
         </tr>
     </thead>
     <tbody id="processBody">
-        @foreach (var item in Model)
+       @* @foreach (var item in Model)
         {
             <tr>
                 <td>@item.Process.Book.Name</td>
@@ -38,5 +38,9 @@
                     }
                 </td>
             </tr>
-        }
+        }*@
 </table>
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="~/js/UserReservations.js"></script>

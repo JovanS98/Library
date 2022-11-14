@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "L3Sckn2urVOVFjVq9KqVYRtVaflouU6WQSarD6kjub8=",
+  "Hash": "WnBAOZ6kAIxQ0p0MPhnyzrSChe+TXahLv6VTZa55Nmg=",
   "Source": "BibliotekaWeb",
   "BasePath": "_content/BibliotekaWeb",
   "Mode": "Default",
@@ -1120,6 +1120,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\favicon.ico"
+    },
+    {
+      "Identity": "C:\\Users\\Stamenkovic\\source\\repos\\Biblioteka\\BibliotekaWeb\\wwwroot\\js\\AllReservations.js",
+      "SourceId": "BibliotekaWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Stamenkovic\\source\\repos\\Biblioteka\\BibliotekaWeb\\wwwroot\\",
+      "BasePath": "_content/BibliotekaWeb",
+      "RelativePath": "js/AllReservations.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\AllReservations.js"
     },
     {
       "Identity": "C:\\Users\\Stamenkovic\\source\\repos\\Biblioteka\\BibliotekaWeb\\wwwroot\\js\\Library.js",
