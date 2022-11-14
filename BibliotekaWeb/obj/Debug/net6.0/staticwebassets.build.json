@@ -1,6 +1,6 @@
 {
   "Version": 1,
-  "Hash": "oxq7LrWVkQKJImgGGZnIgER5Zh2yqCyyPUePyX3UGc4=",
+  "Hash": "L3Sckn2urVOVFjVq9KqVYRtVaflouU6WQSarD6kjub8=",
   "Source": "BibliotekaWeb",
   "BasePath": "_content/BibliotekaWeb",
   "Mode": "Default",
@@ -1122,12 +1122,12 @@
       "OriginalItemSpec": "wwwroot\\favicon.ico"
     },
     {
-      "Identity": "C:\\Users\\Stamenkovic\\source\\repos\\Biblioteka\\BibliotekaWeb\\wwwroot\\js\\Processes.js",
+      "Identity": "C:\\Users\\Stamenkovic\\source\\repos\\Biblioteka\\BibliotekaWeb\\wwwroot\\js\\Library.js",
       "SourceId": "BibliotekaWeb",
       "SourceType": "Discovered",
       "ContentRoot": "C:\\Users\\Stamenkovic\\source\\repos\\Biblioteka\\BibliotekaWeb\\wwwroot\\",
       "BasePath": "_content/BibliotekaWeb",
-      "RelativePath": "js/Processes.js",
+      "RelativePath": "js/Library.js",
       "AssetKind": "All",
       "AssetMode": "All",
       "AssetRole": "Primary",
@@ -1136,7 +1136,24 @@
       "AssetTraitValue": "",
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
-      "OriginalItemSpec": "wwwroot\\js\\Processes.js"
+      "OriginalItemSpec": "wwwroot\\js\\Library.js"
+    },
+    {
+      "Identity": "C:\\Users\\Stamenkovic\\source\\repos\\Biblioteka\\BibliotekaWeb\\wwwroot\\js\\PendingReservations.js",
+      "SourceId": "BibliotekaWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Stamenkovic\\source\\repos\\Biblioteka\\BibliotekaWeb\\wwwroot\\",
+      "BasePath": "_content/BibliotekaWeb",
+      "RelativePath": "js/PendingReservations.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\PendingReservations.js"
     },
     {
       "Identity": "C:\\Users\\Stamenkovic\\source\\repos\\Biblioteka\\BibliotekaWeb\\wwwroot\\js\\site.js",
@@ -1154,6 +1171,23 @@
       "CopyToOutputDirectory": "Never",
       "CopyToPublishDirectory": "PreserveNewest",
       "OriginalItemSpec": "wwwroot\\js\\site.js"
+    },
+    {
+      "Identity": "C:\\Users\\Stamenkovic\\source\\repos\\Biblioteka\\BibliotekaWeb\\wwwroot\\js\\UserReservations.js",
+      "SourceId": "BibliotekaWeb",
+      "SourceType": "Discovered",
+      "ContentRoot": "C:\\Users\\Stamenkovic\\source\\repos\\Biblioteka\\BibliotekaWeb\\wwwroot\\",
+      "BasePath": "_content/BibliotekaWeb",
+      "RelativePath": "js/UserReservations.js",
+      "AssetKind": "All",
+      "AssetMode": "All",
+      "AssetRole": "Primary",
+      "RelatedAsset": "",
+      "AssetTraitName": "",
+      "AssetTraitValue": "",
+      "CopyToOutputDirectory": "Never",
+      "CopyToPublishDirectory": "PreserveNewest",
+      "OriginalItemSpec": "wwwroot\\js\\UserReservations.js"
     },
     {
       "Identity": "C:\\Users\\Stamenkovic\\source\\repos\\Biblioteka\\BibliotekaWeb\\wwwroot\\lib\\bootstrap\\dist\\css\\bootstrap.css",

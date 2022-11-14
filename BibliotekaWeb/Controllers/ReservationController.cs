@@ -105,7 +105,6 @@ namespace BibliotekaWeb.Controllers
         }
 
         // Ne radi sa httpPost
-        // A mozda mi signalR ne radi jer nema http tag?
         // [HttpPost]
         public async Task<IActionResult> ReserveBook(int? id)
         {
@@ -137,6 +136,13 @@ namespace BibliotekaWeb.Controllers
             _db.Processes.Add(process);
             await _db.SaveChangesAsync();
 
+            // signalr mi nije radio jer su process.user i process.book bili null u ovom trenutku, a korsitio sam ih u js datoteci za ispis
+            // i fakticki nije imalo sta da se ispise
+            var user = _db.Users.Find(userId);
+            var book = _db.Books.Find((int)id);
+            process.User = user;
+            process.Book = book;
+
             await _hubContext.Clients.All.NewProcessReceived(process);
 
             return RedirectToAction("Library", "Book");
@@ -167,14 +173,19 @@ namespace BibliotekaWeb.Controllers
             _db.Processes.Add(process);
             await _db.SaveChangesAsync();
 
+            var user = _db.Users.Find(userId);
+            var book = _db.Books.Find((int)id);
+            process.User = user;
+            process.Book = book;
+
             await _hubContext.Clients.All.NewProcessReceived(process);
 
             return RedirectToAction("UserReservations");
         }
 
-        public IActionResult MarkReturnedBook(string userId, int bookId, DateTime time)
+        public IActionResult MarkReturnedBook(string userId, int bookId)
         {
-            Func<Process, bool> condition = p => p.UserId == userId && p.BookId == bookId && p.Time.Date.Equals(time.Date);
+            Func<Process, bool> condition = p => p.UserId == userId && p.BookId == bookId;
 
             Process? updateProcess = _db.Processes.Where(p => p.PendingReservation == true).FirstOrDefault(condition);
 
@@ -220,16 +231,21 @@ namespace BibliotekaWeb.Controllers
             return RedirectToAction("PendingReservations");
         }
 
-        public IActionResult AcceptReservation(string userId, int bookId, DateTime time)
+        public async Task<IActionResult> AcceptReservation(string userId, int bookId)
         {
             //Hocu da dohvatim proces sa poslatim podacima preko viewa(probao sam da prebacim ceo objekat, ali se nije lepo slao
             //Moguce da ne moze ceo objekat pa sam morao posebna 3 podatka da posaljem
             //Pretpostavljam da preko Find() moze da se posalje primarni kljuc i tako nadje proces, medjutim 
             //ne znam sintaksu za slozeni kljuc pa sam pravio condition gde ispitujem sva 3 podatka posebno
 
-            Func<Process, bool> condition = p => p.UserId == userId && p.BookId == bookId && p.Time.Date.Equals(time.Date);
+            // Func<Process, bool> condition = p => p.UserId == userId && p.BookId == bookId && p.Time.Date.Equals(time.Date);
 
-            Process? updateProcess = _db.Processes.Where(p => p.PendingReservation == true).FirstOrDefault(condition);
+            // Zbog signalR i js formata, ne mogu da se izborim sa konverzijom datuma, tako da cu bez datuma da trazim, svakako 
+            // nije mi neophodan datum
+
+            Func<Process, bool> condition = p => p.UserId == userId && p.BookId == bookId;
+
+            Process? updateProcess = _db.Processes.Include(b => b.Book).Where(p => p.PendingReservation == true).FirstOrDefault(condition);
 
             if (updateProcess == null)
             {
@@ -268,6 +284,8 @@ namespace BibliotekaWeb.Controllers
 
             _db.Processes.Update(updateProcess);
             _db.SaveChanges();
+           
+            await _hubContext.Clients.User(userId).BookIsAccepted(userId, updateProcess);
 
             return RedirectToAction("PendingReservations");
         }

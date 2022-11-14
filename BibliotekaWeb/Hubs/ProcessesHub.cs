@@ -9,5 +9,11 @@ namespace BibliotekaWeb.Hubs
         {
             await Clients.All.NewProcessReceived(newProcess);
         }
+        public async Task BookIsAccepted(string userId, Process process)
+        {
+            await Clients.User(userId).BookIsAccepted(userId, process);
+        }
+
+        public string GetConnectionId() => Context.ConnectionId;
     }
 }

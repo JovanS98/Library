@@ -1,18 +1,11 @@
 ﻿@model IEnumerable<Process>
 
-<!-- <script src="~/js/Processes.js"></script>
- <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
- -->
-
     <div class="container p-3 row pt-4 col-6">
         <h1 class="text-primary">Pending reservations</h1>
     </div>
 
     <br />
     <head>
-        <script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
-        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-        <script src="~/js/Processes.js"></script>
     </head>
     <table class="table table-bordered text-white table-striped" style="width:100%">
     <thead>
@@ -24,8 +17,8 @@
             <th>Action</th>
         </tr>
     </thead>
-    <tbody >
-        @foreach (var item in Model)
+    <tbody id="processBody">
+     @*  @foreach (var item in Model)
         {
             <tr>
                 <td>@item.User.FirstName</td>
@@ -35,19 +28,23 @@
                 <td>
                     @if (item.Status == BibliotekaWeb.Core.Enums.Status.reserved)
                     {
-                        <a asp-controller="Reservation" asp-action="AcceptReservation" asp-route-userId=@item.UserId asp-route-bookId=@item.BookId asp-route-time=@item.Time class="btn btn-primary" style=" width:100%">
+                        <a asp-controller="Reservation" asp-action="AcceptReservation" asp-route-userId=@item.UserId asp-route-bookId=@item.BookId class="btn btn-primary" style=" width:100%">
                             Accept reservation
                         </a>
                     }
                     @if (item.Status == BibliotekaWeb.Core.Enums.Status.returned)
                     {
-                        <a asp-controller="Reservation" asp-action="MarkReturnedBook" asp-route-userId=@item.UserId asp-route-bookId=@item.BookId asp-route-time=@item.Time class="btn btn-primary" style=" width:100%">
+                        <a asp-controller="Reservation" asp-action="MarkReturnedBook" asp-route-userId=@item.UserId asp-route-bookId=@item.BookId class="btn btn-primary" style=" width:100%">
                             Mark as returned
                         </a>
                     }
 
                 </td>
             </tr>
-        } 
+        } *@
     </tbody>    
 </table>
+
+<script src="~/lib/microsoft/signalr/dist/browser/signalr.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+<script src="~/js/PendingReservations.js"></script>

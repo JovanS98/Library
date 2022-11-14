@@ -291,3 +291,11 @@ C:\Users\Stamenkovic\source\repos\Biblioteka\BibliotekaWeb\bin\Debug\net6.0\libm
 C:\Users\Stamenkovic\source\repos\Biblioteka\BibliotekaWeb\bin\Debug\net6.0\Microsoft.Azure.Management.Storage.dll
 C:\Users\Stamenkovic\source\repos\Biblioteka\BibliotekaWeb\bin\Debug\net6.0\Microsoft.Rest.ClientRuntime.dll
 C:\Users\Stamenkovic\source\repos\Biblioteka\BibliotekaWeb\bin\Debug\net6.0\Microsoft.Rest.ClientRuntime.Azure.dll
+C:\Users\Stamenkovic\source\repos\Biblioteka\BibliotekaWeb\bin\Debug\net6.0\Microsoft.AspNetCore.Http.Connections.Client.dll
+C:\Users\Stamenkovic\source\repos\Biblioteka\BibliotekaWeb\bin\Debug\net6.0\Microsoft.AspNetCore.Http.Connections.Common.dll
+C:\Users\Stamenkovic\source\repos\Biblioteka\BibliotekaWeb\bin\Debug\net6.0\Microsoft.AspNetCore.SignalR.Client.dll
+C:\Users\Stamenkovic\source\repos\Biblioteka\BibliotekaWeb\bin\Debug\net6.0\Microsoft.AspNetCore.SignalR.Client.Core.dll
+C:\Users\Stamenkovic\source\repos\Biblioteka\BibliotekaWeb\bin\Debug\net6.0\Microsoft.AspNetCore.SignalR.Protocols.Json.dll
+C:\Users\Stamenkovic\source\repos\Biblioteka\BibliotekaWeb\bin\Debug\net6.0\Microsoft.Extensions.Logging.dll
+C:\Users\Stamenkovic\source\repos\Biblioteka\BibliotekaWeb\bin\Debug\net6.0\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\Stamenkovic\source\repos\Biblioteka\BibliotekaWeb\bin\Debug\net6.0\System.Threading.Channels.dll

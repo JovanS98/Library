@@ -64,6 +64,10 @@
               "target": "Package",
               "version": "[6.0.10, )"
             },
+            "Microsoft.AspNetCore.SignalR.Client": {
+              "target": "Package",
+              "version": "[7.0.0, )"
+            },
             "Microsoft.AspNetCore.SignalR.Common": {
               "target": "Package",
               "version": "[7.0.0, )"
@@ -97,6 +101,10 @@
             "Microsoft.VisualStudio.Web.CodeGeneration.Design": {
               "target": "Package",
               "version": "[6.0.10, )"
+            },
+            "json2": {
+              "target": "Package",
+              "version": "[1.0.2, )"
             }
           },
           "imports": [

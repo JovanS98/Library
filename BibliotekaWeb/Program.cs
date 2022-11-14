@@ -62,7 +62,7 @@ app.UseEndpoints(endpoints =>
     {
         options.Transports = Microsoft.AspNetCore.Http.Connections.HttpTransportType.WebSockets;
     });
-});
+}); 
 
 app.MapControllerRoute(
     name: "default",
